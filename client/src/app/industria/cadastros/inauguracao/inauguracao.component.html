@@ -1,0 +1,86 @@
+<section id="formInauguracao">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card_form mt-5">
+          <div class="cabecalho">
+            <h3 class="pb-3 pt-3 text-center text-white text-uppercase">Cadastro de Inauguração</h3>
+          </div>
+          <form class="ms-4 me-4" #formInauguracao="ngForm">
+            <fieldset>
+              <legend>
+                Inauguração
+              </legend>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="tipo" placeholder="Digite o CNPJ da Empresa" name="tipo"
+                      #tipo="ngModel" [(ngModel)]="ing.tipo" required>
+                    <label for="tipo" class="form-label pergunta">Tipo de Inauguração</label>
+                    <div *ngIf="!tipo.valid && tipo.touched" class="alert alert-danger" role="alert">
+                      Informe o Tipo
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-floating col-sm-4 col-12">
+                  <select name="empresa_id" id="empresa_id" class="form-select" [(ngModel)]="ing.empresa_id"
+                    #empresa_id="ngModel">
+                    <option *ngFor="let empresa of lista_empresa" [value]=empresa.id>{{empresa.nome_fantasia}}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="empresa_id">Empresa</label>
+                </div>
+
+                <div class="form-floating col-sm-4 col-12">
+                  <select name="city_id" id="city_id" class="form-select" [(ngModel)]="ing.city_id" #city_id="ngModel">
+                    <option *ngFor="let cidade of lista_cidade" [value]=cidade.id>{{cidade.nome_municipio}}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="city_id">Municipio</label>
+                </div>
+
+              </div>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="data_inauguracao" placeholder="Digite o nome do coordenador"
+                      name="data_inauguracao" #data_inauguracao="ngModel" [(ngModel)]="ing.data_inauguracao" required>
+                      <label for="data_inauguracao" class="form-label pergunta">Data de Inauguração</label>
+                    <div *ngIf="!data_inauguracao.valid && data_inauguracao.touched" class="alert alert-danger" role="alert">
+                      Informar a data é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="valor" placeholder="Digite o nome do coordenador"
+                      name="valor" #valor="ngModel" [(ngModel)]="ing.valor" required>
+                      <label for="valor" class="form-label pergunta">Valor Investido</label>
+                    <div *ngIf="!valor.valid && valor.touched" class="alert alert-danger" role="alert">
+                      Informar o valor é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="qtde_empregos" placeholder="Digite o nome do coordenador"
+                      name="qtde_empregos" #qtde_empregos="ngModel" [(ngModel)]="ing.qtde_empregos" required>
+                      <label for="qtde_empregos" class="form-label pergunta">Empregos a gerar</label>
+                    <div *ngIf="!qtde_empregos.valid && qtde_empregos.touched" class="alert alert-danger" role="alert">
+                      Informe a quantidade de empregos a serem gerados
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </fieldset>
+            <button class="btn btn-primary btn-block mb-4" type="submit" [disabled]="!formInauguracao.valid"
+              (click)="saveInauguracao()">Cadastro</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

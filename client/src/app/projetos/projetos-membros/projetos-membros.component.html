@@ -1,0 +1,159 @@
+<ul class="nav nav-tabs" *ngIf="projeto">
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'resumo']" routerLinkActive="active">Resumo</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'cronograma']" routerLinkActive="active">Cronograma</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'membros']" routerLinkActive="active">Editar Membros</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'listarMeet']" routerLinkActive="active">Reuniões</a>
+  </li>
+</ul>
+
+<div *ngIf="projeto">
+  <div class="project-header">
+    <h3 class="text-center">Membros que participam do projeto {{ projeto.name }}</h3>
+  </div>
+  <div class="row bg-secondary-subtle">
+    <div class="d-flex gap-2 justify-content-center py-4">
+      <button class="btn btn-primary rounded-pill px-3" type="button" routerLink="/projeto/cadastra_membro" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">Cadastrar Membro</button>
+      <button class="btn btn-warning rounded-pill px-3" routerLink="/cadastra_parceiro" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" type="button">Cadastrar Parceiros</button>
+    </div>
+
+    <div class="b-example-divider"></div>
+  </div>
+  <ng-container>
+    <div class="table-cronograma">
+      <table class="table table-bordered table-hover">
+        <thead class="table-active">
+          <tr>
+            <th class="text-center">Nome</th>
+            <th class="text-center">Responsabilidade</th>
+            <th class="text-center">Ainda participa do projeto?</th>
+            <th *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="text-center" colspan="2">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="body-list">
+          <ng-container *ngFor="let membro of membros; let i = index">
+            <tr class="cronograma-row">
+              <td class="align-middle">{{ membro.ass_project_users.name }}</td>
+              <td class="text-center align-middle">{{ membro.ass_project_resp.tipo_responsabilidade }}</td>
+              <td class="text-center align-middle text-capitalize">{{ membro.st_partic }}</td>
+              <td *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="text-center">
+                <button class="btn btn-primary" type="button" (click)="editMembro(membro)" data-bs-toggle="modal"
+                  data-bs-target="#modalEditCronograma">
+                  <fa-icon [icon]="faEdit"></fa-icon>
+                </button>
+              </td>
+              <td *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="text-center">
+                <button class="btn btn-danger" (click)="confirmDeleteMembros(membro.id)">
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Modal Editar Tarefa -->
+<div class="modal fade" id="modalEditCronograma" tabindex="-1" aria-labelledby="modalEditCronogramaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalEditCronogramaLabel">Editar Membro {{ membroUser }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup] = "formMembro">
+          <div class="row">
+
+            <div class="form-floating col-sm-6 col-12 mb-2">
+              <select name="responsabilidade_id" id="responsabilidade_id" class="form-select" formControlName="responsabilidade_id" required>
+                <option value=1>Gerente</option>
+                <option value=2>Coordenador</option>
+                <option value=3>Membro</option>
+              </select>
+              <label class="form-label pergunta ms-3" for="cargo">Reponsabilidade</label>
+            </div>
+
+            <div class="form-floating col-sm-6 col-12 mb-2">
+              <select name="st_partic" id="st_partic" class="form-select" formControlName="st_partic" required>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <label class="form-label pergunta ms-3" for="cargo">Ainda participa do projeto?</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" (click)="updateMembro()" class="btn btn-warning">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal deletar Tarefa-->
+
+<div class="modal fade" id="confirmDeleteMembroModal" tabindex="-1"
+  aria-labelledby="confirmDeleteMembroModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteMembroModalLabel">Confirmar exclusão de membro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Você tem certeza de que deseja excluir este membro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+        <button type="button" class="btn btn-primary" (click)="deleteMembros()">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf='notMembers'>
+  <div class="project-header">
+    <h3 class="text-center">Membros que deixaram o projeto</h3>
+  </div>
+  <ng-container>
+    <div class="table-cronograma">
+      <table class="table table-bordered table-hover">
+        <thead class="table-active">
+          <tr>
+            <th class="text-center">Nome</th>
+            <th class="text-center">Responsabilidade</th>
+            <th class="text-center">Ainda participa do projeto?</th>
+            <th *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="text-center" colspan="2">Ação</th>
+          </tr>
+        </thead>
+        <tbody class="body-list">
+          <ng-container *ngFor="let membro of notMembros; let i = index">
+            <tr class="cronograma-row">
+              <td class="align-middle">{{ membro.ass_project_users.name }}</td>
+              <td class="text-center align-middle">{{ membro.ass_project_resp.tipo_responsabilidade }}</td>
+              <td class="text-center align-middle text-capitalize">{{ membro.st_partic }}</td>
+              <td *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="text-center">
+                <button class="btn btn-primary" type="button" (click)="editMembro(membro)" data-bs-toggle="modal"
+                  data-bs-target="#modalEditCronograma">
+                  <fa-icon [icon]="faEdit"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>

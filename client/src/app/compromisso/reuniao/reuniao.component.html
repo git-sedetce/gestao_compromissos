@@ -1,0 +1,124 @@
+<section id="formProject">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card_form mt-5">
+          <div class="cabecalho">
+            <h3 class="pb-3 pt-3 text-center text-white text-uppercase">Cadastrar Reunião</h3>
+          </div>
+
+          <form class="ms-4 me-4" #formReuniao="ngForm">
+            <fieldset>
+              <div class="row mt-4 mb-4">
+
+                <div class="form-group col-sm-12 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="nome_reuniao" placeholder="Digite o nome da etapa"
+                      name="nome_reuniao" #nome_reuniao="ngModel" [(ngModel)]="reuniao.nome_reuniao" required>
+                    <label for="nome_reuniao" class="form-label pergunta">Assunto</label>
+                    <div *ngIf="!nome_reuniao.valid && nome_reuniao.touched" class="alert alert-danger" role="alert">
+                      Nome da reunião é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="form-floating col-sm-6 col-12">
+                  <select class="form-select" id="projeto_id" name="projeto_id" #projeto_id="ngModel"
+                    [(ngModel)]="reuniao.projeto_id">
+                    <option *ngFor="let projeto of lista_projetos" [value]="projeto.id">{{ projeto.name }}</option>
+                  </select>
+                  <label for="projeto_id" class="form-label pergunta ms-3">Projeto</label>
+                </div> -->
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-outline">
+                    <label for="data_reuniao" class="form-label pergunta">Data da reuniao</label>
+                    <input type="date" class="form-control" id="data_reuniao" name="data_reuniao"
+                      #data_reuniao="ngModel" [(ngModel)]="reuniao.data_reuniao" required>
+                    <div *ngIf="!data_reuniao.valid && data_reuniao.touched" class="alert alert-danger" role="alert">
+                      Informar a data da reunião é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-outline">
+                    <label for="horario_inicial" class="form-label pergunta">Inicio</label>
+                    <!-- {{ reuniao.horario_inicial | date: 'HH:mm' }}-->
+                    <input type="time" class="form-control" id="horario_inicial" name="horario_inicial"
+                      #horario_inicial="ngModel" [(ngModel)]="reuniao.horario_inicial" required>
+                    <div *ngIf="!horario_inicial.valid && horario_inicial.touched" class="alert alert-danger"
+                      role="alert">
+                      Informar o horario de inicio é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-outline">
+                    <label for="horario_final" class="form-label pergunta">Termino</label>
+                    <input type="time" class="form-control" id="horario_final" name="horario_final"
+                      #horario_final="ngModel" [(ngModel)]="reuniao.horario_final" required>
+                    <div *ngIf="!horario_final.valid && horario_final.touched" class="alert alert-danger" role="alert">
+                      Informar o horario de inicio é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="form-floating mt-3 col-sm-4 col-12">
+                  <select class="form-select" id="periodicidade" name="periodicidade" #periodicidade="ngModel"
+                    [(ngModel)]="reuniao.periodicidade">
+                    <option *ngFor="let period of lista_periodicidade" [value]="period.id">{{ period.periodicidade }}
+                    </option>
+                  </select>
+                  <label for="periodicidade" class="form-label pergunta ms-3">Periodicidade</label>
+                </div> -->
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-12">
+                  <div class="form-outline">
+                    <div class="form-floating">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="pauta"
+                        [maxlength]="maxChars" [(ngModel)]="reuniao.pauta" name="pauta"
+                        style="height: 150px"></textarea>
+                      <label for="floatingTextarea2">Pauta</label>
+                      <div class="limite_caractere alert alert-warning mt-1">Caracteres digitados: <strong>{{
+                          reuniao.pauta?.length }} / {{ maxChars }}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="row mt-4 mb-4">
+                <div class="form-floating col-sm-6 col-12">
+                  <select name="coord_id" id="coord_id" class="form-select" [(ngModel)]="reuniao.coord_id"
+                    #coord_id="ngModel" (change)="(foundSexec(coord_id.value, formReuniao))">
+                    <option *ngFor="let coord of lista_coord" [value]=coord.id>{{coord.coordenadoria}}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="coord_id">Coordenadoria</label>
+                </div>
+
+                <div class="form-group col-sm-6 col-12 mb-3">
+                  <div class="form-floating">
+                    <input list="datalistSec" class="form-control" id="secretaria_executiva"
+                      placeholder="Nome da Secretaria Executiva" name="secretaria_executiva" required
+                      [(ngModel)]="secretaria_executiva" disabled>
+                    <label for="name" class="form-label pergunta">Secretaria Executiva</label>
+                  </div>
+                </div>
+              </div> -->
+
+              <button class="btn btn-primary btn-block mb-4" type="submit" [disabled]="!formReuniao.valid"
+                (click)="saveReuniao()">Cadastro Reunião</button>
+              <button class="btn btn-success btn-block ms-3 mb-4" type="submit" [disabled]="!formReuniao.valid"
+                (click)="startMeet()">Iniciar Reunião  <i class="bi bi-skip-end-btn-fill"></i></button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

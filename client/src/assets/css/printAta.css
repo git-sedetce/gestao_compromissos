@@ -1,0 +1,29 @@
+.logo img {
+  width: 80%;
+}
+
+footer {
+  margin: 0;
+  padding: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+.titulo {
+  text-align: center;
+  margin-left: 1.8em !important;
+  margin-right: 1.8em;
+}
+
+.ata p {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  text-align: justify;
+}
+
+#rodape{
+  background-image: url("../../assets/imgs/rodape.png");
+  width: 100%;
+}

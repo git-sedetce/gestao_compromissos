@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  <div class="row main-content bg-success text-center">
+    <div class="col-md-4 text-center company__info">
+      <!--<span class="company__logo">
+        <h2><span class="fa fa-android"></span></h2>
+      </span>-->
+      <h4 class="company_title"><img src="../../assets/imgs/Logo-SDE---Vertical---Branco.png" alt=""></h4>
+    </div>
+    <div class="col-md-8 col-xs-12 col-sm-12 login_form">
+      <div class="container-fluid">
+        <div class="row">
+          <h2>Cadastro da instituição Parceira</h2>
+        </div>
+        <div class="row">
+          <form class="form-group" #formCadastroParceiro="ngForm">
+            <div class="row">
+              <input type="text" name="name" id="name" class="form__input form-control" #name="ngModel" [(ngModel)]="parceiro.name"  placeholder="Nome do responsável" required>
+              <div *ngIf="!name.valid && name.touched" class="alert alert-danger" role="alert">
+                Nome do responsável é obrigatório
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-12">
+                <input type="email" name="user_email" id="user_email" class="form__input form-control" #user_email="ngModel" [(ngModel)]="parceiro.user_email" (blur)="consultaEmail(parceiro.user_email,  formCadastroParceiro)" placeholder="Email do parceiro" required>
+              <div *ngIf="!user_email.valid && user_email.touched" class="alert alert-danger" role="alert">
+                Email inválido
+              </div>
+              </div>
+
+              <div class="col-sm-6 col-12">
+                <input type="text" name="user_phone" id="user_phone" class="form__input form-control" #user_phone="ngModel" [(ngModel)]="parceiro.user_phone" placeholder="Telefone do parceiro" prefix="+55" mask="(00) 0 0000-0000||(00) 0000-0000" required>
+              <div *ngIf="!user_phone.valid && user_phone.touched" class="alert alert-danger" role="alert">
+                Telefone é obrigatório
+              </div>
+              </div>
+
+            </div>
+            <!-- <div class="row">
+              <input type="password" name="user_password" id="user_password" class="form__input__half form-control" #user_password="ngModel" [(ngModel)]="parceiro.user_password" placeholder="Senha" minlength="8" required>
+              <div *ngIf="!user_password.valid && user_password.touched" class="alert alert-danger" role="alert">Digite a sua senha</div>
+              <div *ngIf="(user_password.touched || user_password.valid) && user_password.errors" class="alert alert-danger" role="alert">A senha deve ter no mínimo de 8 caracteres e deve conter letras, numeros,  caracteres especais e letras maiúscula.</div>
+
+              <input type="password" name="user_confirm_password" id="user_confirm_password" class="form__input__half form-control" #user_confirm_password="ngModel" [(ngModel)]="parceiro.user_confirm_password" placeholder="Confirmação de senha" minlength="8" required>
+              <div *ngIf="!user_confirm_password.valid && user_confirm_password.touched" class="alert alert-danger" role="alert">Confirmação de senha é obrigatório</div>
+              <div *ngIf="(user_confirm_password.touched) && parceiro.user_password !== parceiro.user_confirm_password" class="alert alert-danger" role="alert">A senha não confere com a confirmação.</div>
+            </div>             -->
+            <!-- <div class="row">
+              <select name="profile" id="profile" class="form__input form-control" #profile_id="ngModel" [(ngModel)]="parceiro.profile_id">
+                <option selected>Selecione o Perfil</option>
+                <option value="1">Admin</option>
+                <option value="2">Secretario</option>
+                <option value="3">Coordenador</option>
+                <option value="4">Colaborador</option>
+                <option value="5">Parceiro</option>
+              </select>
+            </div> -->
+            <div class="row">
+
+              <div class="col-sm-6 col-12">
+                <input type="text" name="secretaria_executiva" id="secretaria_executiva" class="form__input form-control" #secretaria_executiva="ngModel" [(ngModel)]="parceiro.sexec_id" placeholder="Instituição parceira" required>
+              <div *ngIf="!secretaria_executiva.valid && secretaria_executiva.touched" class="alert alert-danger" role="alert">
+                Instituição é obrigatório
+              </div>
+              </div>
+
+              <div class="col-sm-6 col-12">
+                <input type="text" name="coordenadoria" id="coordenadoria" class="form__input form-control" #coordenadoria="ngModel" [(ngModel)]="parceiro.coord_id" placeholder="Insira o setor" required>
+              <div *ngIf="!coordenadoria.valid && coordenadoria.touched" class="alert alert-danger" role="alert">
+                Setor é obrigatório
+              </div>
+              </div>
+
+              <!-- <input list="datalistCoord" class="form__input form-control" id="coordenadoria" name="coordenadoria" #coordenadoria="ngModel" placeholder="Insira o setor" [(ngModel)]="parceiro.coordenadoria" required>
+              <datalist id="datalistCoord">
+                <option ></option>
+              </datalist>
+              <div *ngIf="!coordenadoria.valid &&  coordenadoria.touched" class="alert alert-danger" role="alert">
+                Setor é obrigatório</div> -->
+
+
+              <!-- <select name="coordenadoria_id" id="coordenadoria_id" class="form__input form-control" #coordenadoria_id="ngModel" [(ngModel)]="parceiro.coordenadoria_id">
+                <option selected>Selecione a Coordenadoria</option>
+                <option *ngFor="let coordenacao of lista_coordenadoria" [value]="coordenacao.id" (blur)="(localizaCoord(coordenacao.value, formCadastroUser))">{{ coordenacao.coordenadoria}}</option>
+              </select> -->
+            </div>
+            <!-- <div class="row">
+              <input list="datalistSec" name="secretaria_executiva" id="secretaria_executiva" class="form__input form-control" #secretaria_executiva="ngModel" [(ngModel)]="parceiro.secretaria_executiva" placeholder="Secretaria Executiva" disabled>
+              <div *ngIf="!secretaria_executiva.valid && secretaria_executiva.touched" class="alert alert-danger" role="alert">Informe a Coordenadoria</div>
+            </div> -->
+            <div class="row">
+              <input type="submit" [disabled]="!formCadastroParceiro.valid" (click)="savePartner()" value="Submit" class="btn">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

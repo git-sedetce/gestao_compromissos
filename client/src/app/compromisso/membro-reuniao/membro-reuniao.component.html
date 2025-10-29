@@ -1,0 +1,344 @@
+<div class="container-fluid mt-3 pt-2">
+  <div class="card ms-3 me-3">
+    <div class="card-body">
+      <h3 class="text-center mt-3 mb-3 pt-2 pb-2 text-uppercase text-white bg-warning">Participantes da reunião: {{
+        meetUp.nome_reuniao }}</h3>
+      <ng-container>
+        <div class="table-cronograma">
+          <table class="table table-bordered table-hover">
+            <thead class="table-active">
+              <tr>
+                <th class="text-center align-middle">Nome</th>
+                <th class="text-center align-middle">Coordenação / Executiva</th>
+                <th class="text-center align-middle">Compromisso</th>
+                <th class="text-center align-middle">Data Inicial</th>
+                <th class="text-center align-middle">Prazo</th>
+                <th class="text-center align-middle">Status</th>
+                <th class="text-center align-middle">Situação
+                </th>
+                <th scope="col" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3"
+                  class="align-middle text-center">Enviar Email</th>
+                <th *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="text-center" colspan="3">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody class="body-list">
+              <ng-container *ngFor="let meet of reuniao; let i = index">
+                <tr class="cronograma-row">
+                  <td class="align-middle">{{ meet.ass_commitment_users.name }}</td>
+                  <td class="align-middle text-center">{{ meet.ass_commitment_users.ass_users_coord.sigla }} / {{
+                    meet.ass_commitment_users.ass_users_sexec.sigla }}</td>
+                  <!-- <td class="align-middle text-center">{{ meet.ass_commitment_users.ass_users_sexec.sigla }}</td> -->
+                  <td class="align-middle text-center">{{ meet.compromisso }}</td>
+                  <td class="align-middle text-center">{{ meet.data_inicial | date : "dd/MM/yyyy" }}</td>
+                  <td class="align-middle text-center">{{ meet.prazo }}</td>
+                  <td class="align-middle text-center">{{ meet.ass_commitment_status.name }}</td>
+
+                  <td class="align-middle text-center">
+                    <button class="btn btn-warning" (click)="getSituacao(meet.id, meet.ass_commitment_users.id)"
+                      data-bs-toggle="modal" data-bs-target="#modalEditStatus"><fa-icon [icon]="faPaperclip"></fa-icon>
+                    </button>
+                  </td>
+
+                  <td class="align-middle text-center" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">
+                    <button title="Ver Reuniao" type="button" class="btn btn-success mx-3"
+                      (click)="mailCommitment(meet.id)"><i class="bi bi-envelope-arrow-up-fill"></i></button>
+                  </td>
+
+                  <td class="align-middle text-center" *ngIf="profile_id === 1 || profile_id === 2">
+                    <button class="btn btn-primary" (click)="edit(meet)" data-bs-toggle="modal"
+                      data-bs-target="#modalEditTask"><fa-icon [icon]="faEdit"></fa-icon>
+                    </button>
+                  </td>
+                  <td class="align-middle text-center" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">
+                    <button class="btn btn-danger" (click)="delete(meet)" type="button">
+                      <fa-icon [icon]="faTrash"></fa-icon>
+                    </button>
+                  </td>
+                  <td class="align-middle text-center"><button title="Exportar Acompanhamento"
+                      (click)="exportar(meet.id)" type="button" class="btn btn-info mx-3" data-bs-toggle="modal"
+                      data-bs-target="#modalExportAta">
+                      <fa-icon [icon]="faFilePdf"></fa-icon></button></td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+          <div class="row" *ngIf="meet_complete && (profile_id === 1 || profile_id === 2 || profile_id === 3)">
+            <div class="col-sm-6 col-12 mb-3 mt-2 form-check form-switch ps-5">
+              <input class="form-check-input" #compromissos_concluidos="ngModel"
+                [(ngModel)]="meetUp.compromissos_concluidos" (change)="finalizaCompromisso()" type="checkbox"
+                id="userActiveSwitchCheck">
+              <label class="form-check-label" for="userActiveSwitchCheck">
+                Todos os Compromissos foram concluídos?
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Anotações -->
+<div class="modal fade" id="modalEditStatus" tabindex="-1" aria-labelledby="modalEditStatusLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalEditStatusLabel">Informar Situação</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body px-4">
+        <form #formSituacao="ngForm">
+          <fieldset *ngIf="can_status">
+            <div class="mb-4">
+              <label for="editor" class="form-label fw-bold">Situação do Compromisso</label>
+              <quill-editor
+                id="editor"
+                [(ngModel)]="situacao.situacao"
+                name="situacao"
+                [style]="{ height: '200px', width: '100%' }"
+                [placeholder]="'Descreva a situação aqui...'"
+                [modules]="editorModules"
+                class="bg-white rounded border w-100"
+              ></quill-editor>
+
+              <div class="alert alert-warning mt-2 py-2 px-3">
+                <small>
+                  Caracteres digitados:
+                  <strong>{{ situacao.situacao?.length || 0 }} / {{ maxChars }}</strong>
+                </small>
+              </div>
+
+              <div class="text-end mt-2">
+                <button type="button" (click)="saveSituacao()" class="btn btn-warning px-4">Salvar</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="card mt-4" *ngIf="have_status">
+          <div class="card-body has-status">
+            <h2 class="text-center">Acompanhamento</h2>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-active">
+                  <tr>
+                    <th class="align-middle text-center">Status</th>
+                    <th class="align-middle text-center">Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let status of lista_situacao">
+                    <td class="align-middle" [innerHTML]="status.situacao"></td>
+                    <td class="align-middle text-center">{{ status.createdAt | date : 'dd/MM/yyyy' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!have_status" class="no-status mt-4">
+          <p class="text-muted">Sem anotações disponíveis</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Editar Tarefa -->
+<div class="modal fade" id="modalEditTask" tabindex="-1" aria-labelledby="modalEditTaskLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalEditTaskLabel">Editar Compromisso</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formCompromisso">
+          <fieldset>
+
+            <div class="row mt-4 mb-4">
+              <div class="form-group col-12">
+                <div class="form-outline">
+                  <div class="form-floating">
+                    <textarea class="form-control" formControlName="compromisso" name="compromisso"
+                      style="height: 150px"></textarea>
+                    <label for="floatingTextarea2">Compromisso</label>
+                    <!-- <div class="limite_caractere alert alert-warning mt-1">Caracteres digitados: <strong>{{
+                      compromisso.compromisso?.length }} / {{ maxChars }}</strong></div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4 mb-4">
+              <div class="form-floating col-sm-12 col-12 mb-2">
+                <select name="responsavel_id" id="responsavel_id" class="form-select" formControlName="responsavel_id"
+                  required>
+                  <option *ngFor="let user of lista_users" [value]="user.id">{{ user.name }}</option>
+                </select>
+                <label class="form-label pergunta ms-3" for="cargo">Responsável</label>
+              </div>
+            </div>
+
+            <div class="row mt-4 mb-4">
+
+              <div class="form-group col-sm-2 col-12">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="prazo" name="prazo" formControlName="prazo" required>
+                  <label for="prazo" class="form-label pergunta">Prazo</label>
+                  <!-- <div *ngIf="!prazo.valid && prazo.touched" class="alert alert-danger" role="alert">
+                    Informar o prazo é obrigatório
+                  </div> -->
+                </div>
+              </div>
+
+              <div class="form-floating col-sm-3 col-12 mb-2">
+                <select name="status_id" id="status_id" class="form-select" formControlName="status_id" required>
+                  <option *ngFor="let status of lista_status" [value]="status.id">{{ status.name }}</option>
+                </select>
+                <label class="form-label pergunta ms-3" for="cargo">Situação Atual</label>
+              </div>
+
+              <div class="form-group col-sm-2 col-12">
+                <div class="form-floating">
+                  <input type="date" class="form-control" id="data_inicial" formControlName="data_inicial" required>
+                  <label for="data_inicial" class="form-label pergunta">Data de início</label>
+                  <!-- <div *ngIf="!data_inicial.valid && data_inicial.touched" class="alert alert-danger" role="alert">
+                    Informar a data de início é obrigatório
+                  </div> -->
+                </div>
+              </div>
+
+              <div class="form-group col-sm-2 col-12">
+                <div class="form-floating">
+                  <input type="date" class="form-control" id="data_inicial" formControlName="data_conclusao" required>
+                  <label for="data_inicial" class="form-label pergunta">Data de Conclusão</label>
+                  <!-- <div *ngIf="!data_inicial.valid && data_inicial.touched" class="alert alert-danger" role="alert">
+                    Informar a data de início é obrigatório
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-sm-3 col-12 mb-3">
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label" for="vale_transporte">Compromisso arquivado?</label>
+                  <input class="form-check-input" type="checkbox" id="arquivo" formControlName="arquivo" name="arquivo"
+                    value=true>
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" (click)="saveCompromisso()" class="btn btn-warning">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal Exportar acompanhamentos-->
+<div class="modal fade" id="modalExportAta" tabindex="-1" aria-labelledby="modalExportAtaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable mt-5">
+    <div class="modal-content">
+      <div class="modal-header text-bg-success">
+        <h1 class="modal-title fs-5" id="modalExportAtaLabel">Atividade dos Compromissos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" id="meetingMinutes">
+        <div class="container-fluid">
+
+          <!-- Cabeçalho com Logo à Direita -->
+          <div class="row mt-3 pt-2 mb-4 align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap w-100">
+              <div>
+                <h2 class="fw-semibold mb-1">GOVERNO DO ESTADO DO CEARÁ</h2>
+                <p class="mb-0">SECRETARIA DO DESENVOLVIMENTO ECONÔMICO</p>
+              </div>
+              <div class="text-end mt-3 mt-md-0">
+                <img src="./assets/imgs/Logo-SDE---Horizontal.png" alt="Logo da Secretaria" style="height: 80px;"
+                  class="img-fluid">
+              </div>
+            </div>
+          </div>
+
+          <!-- Se não houver relatório -->
+          <div class="row mt-4 ata" *ngIf="!has_report">
+            <div class="d-flex align-items-center justify-content-center bg-light">
+              <div class="text-center p-4 mt-4 mb-4 border rounded shadow-sm bg-white">
+                <h1 class="display-4 text-muted">☹️</h1>
+                <h2 class="mb-3">Ops! Parece que não há nada por aqui.</h2>
+                <p class="lead">Esta página ainda não possui informações para exibir.</p>
+                <p class="text-muted">Aguarde por atualizações ou retorne mais tarde.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Se houver relatório -->
+          <div class="row mt-4 ata" *ngIf="has_report">
+            <h2 class="mb-3">Detalhes do Compromisso</h2>
+            <div class="card p-3 mb-3">
+              <p><strong>Compromisso:</strong> {{ desc_compromisso }}</p>
+              <p><strong>Responsável:</strong> {{ user_compromisso }}</p>
+            </div>
+
+            <h3>Atividades</h3>
+
+            <!-- TABELA COM SCROLL HORIZONTAL -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                  <tr>
+                    <th style="min-width: 300px;">Situação</th>
+                    <th style="min-width: 150px;">Data de Publicação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let report of lista_cmt">
+                    <td style="word-break: break-word;" [innerHTML]="report?.situacao"></td>
+                    <td>{{ report.createdAt }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Rodapé -->
+          <div class="row mt-4">
+            <footer class="container-fluid">
+              <figure id="rodape">
+                <img src="./assets/imgs/rodape.png" alt="Rodapé Governo do Ceará" class="img-fluid w-100">
+              </figure>
+            </footer>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Botões do rodapé -->
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" [useExistingCss]="true" printSectionId="meetingMinutes" ngxPrint>
+          Exportar Ata
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

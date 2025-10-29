@@ -1,0 +1,99 @@
+<section id="formEmpresa">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card_form mt-5">
+          <div class="cabecalho">
+            <h3 class="pb-3 pt-3 text-center text-white text-uppercase">Cadastro SIMA</h3>
+          </div>
+          <form class="ms-4 me-4" #formSIMA="ngForm">
+            <fieldset>
+              <legend>
+                SIMA
+              </legend>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="numero_programa" placeholder="Digite o CNPJ da Empresa" name="numero_programa"
+                      #numero_programa="ngModel" [(ngModel)]="sima.numero_programa" required>
+                    <label for="numero_programa" class="form-label pergunta">Número do Programa</label>
+                    <div *ngIf="!numero_programa.valid && numero_programa.touched" class="alert alert-danger" role="alert">
+                      Número do programa é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="nome_entrega"
+                      placeholder="Nome da Entrega" name="nome_entrega" #nome_entrega="ngModel"
+                      [(ngModel)]="sima.nome_entrega" required>
+                    <label for="nome_entrega" class="form-label pergunta">Nome da Entrega</label>
+                    <div *ngIf="!nome_entrega.valid && nome_entrega.touched" class="alert alert-danger" role="alert">
+                      Nome da Entrega é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-floating col-sm-4 col-12">
+                  <select name="responsavel_id" id="responsavel_id" class="form-select" [(ngModel)]="sima.responsavel_id" #responsavel_id="ngModel">
+                    <option *ngFor="let resp of lista_resp" [value]="resp.id">{{ resp.name }}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="responsavel_id">Responsável</label>
+
+                </div>
+
+              </div>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="meta"
+                      placeholder="Digite a razão social da Empresa" name="meta" #meta="ngModel"
+                      [(ngModel)]="sima.meta" required>
+                    <label for="meta" class="form-label pergunta">Meta</label>
+                    <div *ngIf="!meta.valid && meta.touched" class="alert alert-danger" role="alert">
+                      Meta é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="mapp" name="mapp" #mapp="ngModel"
+                      [(ngModel)]="sima.mapp">
+                    <label for="mapp" class="form-label pergunta">Mapp</label>
+                  </div>
+                  </div>
+
+                  <div class="form-floating col-sm-4 col-12">
+                    <select name="status_id" id="status_id" class="form-select" [(ngModel)]="sima.status_id" #status_id="ngModel">
+                      <option *ngFor="let status of lista_status" [value]="status.id">{{ status.name }}</option>
+                    </select>
+                    <label class="form-label pergunta ms-3" for="status_id">Status</label>
+
+                  </div>
+
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-12">
+                  <div class="form-outline">
+                    <div class="form-floating">
+                      <textarea class="form-control" id="detalhamento" [maxlength]="maxChars" [(ngModel)]="sima.detalhamento" name="detalhamento" style="height: 100px"></textarea>
+                      <label for="floatingTextarea2">Detalhamento</label>
+                      <div class="limite_caractere alert alert-warning mt-1">Caracteres digitados: <strong>{{
+                        sima.detalhamento?.length }} / {{ maxChars }}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+            <button class="btn btn-primary btn-block mb-4" type="submit" [disabled]="!formSIMA.valid"
+              (click)="saveSima()">Cadastro SIMA</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

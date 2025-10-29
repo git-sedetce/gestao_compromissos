@@ -1,0 +1,247 @@
+<section id="formAtracao">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card_form mt-5">
+          <div class="cabecalho">
+            <h3 class="pb-3 pt-3 text-center text-white text-uppercase">Cadastro de Atração</h3>
+          </div>
+          <form class="ms-4 me-4" #formAtracao="ngForm">
+            <fieldset>
+              <legend>
+                Dados da Empresa
+              </legend>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="cnpj" placeholder="Digite o CNPJ da Empresa" name="cnpj"
+                      #cnpj="ngModel" [(ngModel)]="empresa.cnpj" mask="00.000.000/0000-00" required>
+                    <label for="cnpj" class="form-label pergunta">CNPJ da Empresa</label>
+                    <div *ngIf="!cnpj.valid && cnpj.touched" class="alert alert-danger" role="alert">
+                      CNPJ é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="razao_social"
+                      placeholder="Digite a razão social da Empresa" name="razao_social" #razao_social="ngModel"
+                      [(ngModel)]="empresa.razao_social" required>
+                    <label for="razao_social" class="form-label pergunta">Razão Social</label>
+                    <div *ngIf="!razao_social.valid && razao_social.touched" class="alert alert-danger" role="alert">
+                      Razão Social é obrigatório
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="form-floating col-sm-6 col-12">
+                  <select class="form-select" id="gerente_id" name="gerente_id" #gerente_id="ngModel"
+                    [(ngModel)]="projeto.gerente_id">
+                    <option *ngFor="let gerente of lista_gerente" [value]="gerente.id">{{ gerente.name }}</option>
+                  </select>
+                  <label for="gerente_id" class="form-label pergunta ms-3">Gerente do Projeto</label>
+                  <div *ngIf="!gerente_id.valid && gerente_id.touched" class="alert alert-danger" role="alert">
+                    Nome do gerente é obrigatório
+                  </div>
+                </div> -->
+              </div>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="nome_fantasia"
+                      placeholder="Digite a razão social da Empresa" name="nome_fantasia" #nome_fantasia="ngModel"
+                      [(ngModel)]="empresa.nome_fantasia" required>
+                    <label for="nome_fantasia" class="form-label pergunta">Nome Fantasia</label>
+                    <div *ngIf="!nome_fantasia.valid && nome_fantasia.touched" class="alert alert-danger" role="alert">
+                      Nome Fantasia é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-floating col-sm-3 col-12">
+                  <select name="city_id" id="city_id" class="form-select" [(ngModel)]="empresa.city_id" #city_id="ngModel"
+                  (change)="getEstado(empresa.city_id)">
+                    <option *ngFor="let city of city_list" [value]=city.id >{{city.municipio}} - {{ city.ass_cidadebr_estadobr.sigla }}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="city_id">Municipio de Origem</label>
+                </div>
+
+                <div class="col-sm-3 col-12 mb-3">
+                  <div class="form-floating">
+                    <input class="form-control" type="text" id="estado" placeholder="Informe a sua região" name="estado"
+                     required [(ngModel)]="estado" readonly>
+                     <label for="estado" class="form-label pergunta">Estado de Origem</label>
+
+                  </div>
+                </div>
+
+                <!-- <div class="form-floating col-sm-4 col-12">
+                  <input type="text" class="form-control" id="localizacao"
+                      placeholder="Digite a razão social da Empresa" name="localizacao" #localizacao="ngModel"
+                      [(ngModel)]="empresa.localizacao">
+                    <label for="localizacao" class="form-label pergunta">Origem da Empresa</label>
+                </div> -->
+              </div>
+
+            </fieldset>
+            <fieldset>
+              <legend>
+                Dados da Atração
+              </legend>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="contato" placeholder="Digite o nome do Contato"
+                      name="contato" #contato="ngModel" [(ngModel)]="atracao.contato" required>
+                    <label for="contato" class="form-label
+                      pergunta">Nome do Contato</label>
+                    <div *ngIf="!contato.valid && contato.touched" class="alert alert-danger" role="alert">
+                      Nome do contato é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="email" class="form-control" id="email_contato" placeholder="Email do Contato"
+                      name="email_contato" #email_contato="ngModel" [(ngModel)]="atracao.email_contato" required>
+                    <label for="email_contato" class="form-label
+                      pergunta">Email do Contato</label>
+                    <div *ngIf="!email_contato.valid && email_contato.touched" class="alert alert-danger" role="alert">
+                      Email é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="email" class="form-control" id="fone_contato" placeholder="Email do Contato"
+                      name="fone_contato" #fone_contato="ngModel" [(ngModel)]="atracao.fone_contato" prefix="+55 " mask="(00) 0 0000-0000||(00) 0000-0000" required>
+                    <label for="fone_contato" class="form-label
+                      pergunta">Fone</label>
+                    <div *ngIf="!fone_contato.valid && fone_contato.touched" class="alert alert-danger" role="alert">
+                      Telefone é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-floating col-sm-4 col-12">
+                  <select name="city_id" id="city_id" class="form-select" [(ngModel)]="atracao.city_id"
+                    #city_id="ngModel">
+                    <option *ngFor="let cidade of lista_cidade" [value]=cidade.id>{{cidade.nome_municipio}}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="city_id">Municipio de Implantação</label>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="data_inicio" placeholder="Digite o nome do coordenador"
+                      name="data_inicio" #data_inicio="ngModel" [(ngModel)]="atracao.data_inicio" required>
+                      <label for="data_inicio" class="form-label pergunta">Início do Projeto</label>
+                    <div *ngIf="!data_inicio.valid && data_inicio.touched" class="alert alert-danger" role="alert">
+                      Informar a data de inínico é obrigatório
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4 mb-4">
+
+                <div class="col-sm-2 col-12 mb-3">
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label" for="mou">Possui MOU?</label>
+                    <input class="form-check-input" type="checkbox" id="mou" #mou="ngModel" [(ngModel)]="atracao.mou" name="mou" value=true>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-12 mb-3">
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label" for="tem_fdi">Possui pedido do FDI?</label>
+                    <input class="form-check-input" type="checkbox" id="tem_fdi" #tem_fdi="ngModel" [(ngModel)]="atracao.tem_fdi" name="tem_fdi" value=true>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-3 col-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="valor_investimento" placeholder="Digite o nome do coordenador"
+                      name="valor_investimento" #valor_investimento="ngModel" [(ngModel)]="atracao.valor_investimento" required>
+                      <label for="valor_investimento" class="form-label pergunta">Valor Investimento</label>
+                    <div *ngIf="!valor_investimento.valid && valor_investimento.touched" class="alert alert-danger" role="alert">
+                      Informar o valor investido é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-3 col-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="qtde_empregos" placeholder="Digite o nome do coordenador"
+                      name="qtde_empregos" #qtde_empregos="ngModel" [(ngModel)]="atracao.qtde_empregos" required>
+                      <label for="qtde_empregos" class="form-label pergunta">Empregos a gerar</label>
+                    <div *ngIf="!qtde_empregos.valid && qtde_empregos.touched" class="alert alert-danger" role="alert">
+                      Informe a quantidade de empregos a serem gerados
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-floating col-sm-2 col-12">
+                  <select name="status_id" id="status_id" class="form-select" [(ngModel)]="atracao.status_id" #status_id="ngModel">
+                    <option *ngFor="let status of lista_status" [value]="status.id">{{ status.name }}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="status_id">Status</label>
+
+                </div>
+
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-12">
+                  <div class="form-outline">
+                    <div class="form-floating">
+                      <textarea class="form-control" id="detalhamento" [maxlength]="maxChars" [(ngModel)]="atracao.detalhamento" name="detalhamento" style="height: 100px"></textarea>
+                      <label for="floatingTextarea2">Detalhamento do Status</label>
+                      <div class="limite_caractere alert alert-warning mt-1">Caracteres digitados: <strong>{{
+                        atracao.detalhamento?.length }} / {{ maxChars }}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-12">
+                  <div class="form-outline">
+                    <div class="form-floating">
+                      <textarea class="form-control" id="descricao" [maxlength]="maxChars" [(ngModel)]="atracao.descricao" name="descricao" style="height: 150px"></textarea>
+                      <label for="floatingTextarea2">Descricao</label>
+                      <div class="limite_caractere alert alert-warning mt-1">Caracteres digitados: <strong>{{
+                        atracao.descricao?.length }} / {{ maxChars }}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-12">
+                  <div class="form-outline">
+                    <div class="form-floating">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="proximo_passo" [maxlength]="maxChars" [(ngModel)]="atracao.proximo_passo" name="proximo_passo" style="height: 150px"></textarea>
+                      <label for="floatingTextarea2">Proximo Passos</label>
+                      <div class="limite_caractere alert alert-warning mt-1">Caracteres digitados: <strong>{{
+                        atracao.proximo_passo?.length }} / {{ maxChars }}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </fieldset>
+            <button class="btn btn-primary btn-block mb-4" type="submit" [disabled]="!formAtracao.valid"
+              (click)="saveCompany()">Cadastro de Empresa e Atração</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

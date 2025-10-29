@@ -1,0 +1,54 @@
+.no-status{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35.5vh;
+  width: 57vw;
+  background-color: #f7f7f7;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #777;
+}
+
+.has-status {
+  width: 55vw;
+}
+
+.modal-body {
+  margin: 0.5rem auto;
+}
+
+.logo img {
+  width: 80%;
+}
+
+.ata{
+  min-height: 81vh;
+  margin-top: 0em;
+}
+
+#rodape img {
+  width: 100%;
+}
+
+.titulo {
+  text-align: center;
+  margin-left: 1.8em !important;
+  margin-right: 1.8em;
+}
+
+.ata p {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  text-align: justify;
+}
+
+@media print {
+  @page {
+    margin: 0;
+    size: auto;
+  }
+  body {
+    margin: 10px;
+  }
+}

@@ -1,0 +1,131 @@
+<div class="container" *ngIf="filteredProjects.length > 0; else noProjects">
+  <div class="row bg-light-subtle">
+    <div class="d-flex gap-2 justify-content-center py-4">
+      <button class="btn btn-primary rounded-pill px-3" type="button" routerLink="/projeto/projetos" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">Cadastrar Projeto</button>
+      <!-- <button class="btn btn-secondary rounded-pill px-3" type="button">Secondary</button>
+      <button class="btn btn-success rounded-pill px-3" type="button">Success</button>-->
+      <button class="btn btn-danger rounded-pill px-3" routerLink="/projeto/cadastroTarefa" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" type="button">Cadastrar Tarefa</button>
+      <button class="btn btn-warning rounded-pill px-3" routerLink="/projeto/subTarefas" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" type="button">Cadastrar Sub Tarefa</button>
+      <!-- <button class="btn btn-info rounded-pill px-3" type="button">Info</button>
+      <button class="btn btn-light rounded-pill px-3" type="button">Light</button>
+      <button class="btn btn-dark rounded-pill px-3" type="button">Dark</button>
+      <button class="btn btn-link rounded-pill px-3" type="button">Link</button> -->
+    </div>
+
+    <div class="b-example-divider"></div>
+  </div>
+  <div class="gray-panel">
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="input-group">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="status-label">Projetos</span>
+          </div>
+          <select class="form-control" [(ngModel)]="selectedProjects" (change)="filterProjects()" aria-labelledby="status-label">
+            <option *ngFor="let projects of lista_projetos" [value]="projects.ass_project_members.name">{{ projects.ass_project_members.name }}</option>
+          </select>
+
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="status-label">Status</span>
+          </div>
+          <select class="form-control" [(ngModel)]="selectedStatus" (change)="filterProjectsStatus()" aria-labelledby="status-label">
+            <option value="">Todos</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Paralisado">Paralisado</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-primary btn-block mb-4" type="submit" (click)="getProjects()">Todos os Projetos</button>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngFor="let project of filteredProjects" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card" [routerLink]="['/projeto/projetos', project.id, 'resumo']" span role="button" tabindex="0">
+          <div class="card-body">
+            <h5 class="card-title">{{ project?.ass_project_members?.name }}</h5>
+            <div class="card-dates">
+              <p class="card-text">
+                <small class="text-muted">
+                  <i class="bi bi-calendar"></i>
+                  {{ project?.ass_project_members?.data_inicio | date : "dd/MM/yy" }}
+                </small>
+              </p>
+              <p class="card-text" *ngIf="project?.ass_project_status?.name == 'Concluído'">
+                <small class="text-muted">
+                  <i class="bi bi-calendar-check-fill"></i>
+                  {{ project?.ass_project_members?.data_conclusao | date : "dd/MM/yy" }}
+                </small>
+              </p>
+
+              <p class="card-text" *ngIf="project?.ass_project_status?.name != 'Concluído'">
+                <small class="text-muted">
+                  <i class="bi bi-calendar-fill"></i>
+                  {{ project?.ass_project_members?.previsao_conclusao | date : "dd/MM/yy" }} (previsão)
+                </small>
+              </p>
+            </div>
+            <p class="card-text">
+              <small class="text-muted">
+                <i class="bi bi-info-circle"></i>
+                {{ project?.ass_project_status?.name }}
+              </small>
+            </p>
+            <p class="card-text">
+              <small class="text-muted">
+                <i class="bi bi-person"></i>
+                {{ project?.ass_project_users?.name }}
+              </small>
+            </p>
+            <div class="progress">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                [style.width.%]="barProgress(project.ass_project_members.data_inicio, project.ass_project_members.previsao_conclusao, project.ass_project_status.name)"
+                [attr.aria-valuenow]="barProgress(project.ass_project_members.data_inicio, project.ass_project_members.previsao_conclusao, project.ass_project_status.name)"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [ngClass]="getStatusBar(project)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #noProjects>
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="input-group">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="status-label">Projetos</span>
+          </div>
+          <select class="form-control" [(ngModel)]="selectedProjects" (change)="filterProjects()" aria-labelledby="status-label">
+            <option *ngFor="let projects of lista_projetos" [value]="projects.ass_project_members.name">{{ projects.ass_project_members.name }}</option>
+          </select>
+
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="status-label">Status</span>
+          </div>
+          <select class="form-control" [(ngModel)]="selectedStatus" (change)="filterProjects()" aria-labelledby="status-label">
+            <option value="">Todos</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Concluído">Concluído</option>
+            <option value="Paralisado">Paralisado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <button class="btn btn-primary btn-block mb-4" type="submit" (click)="getProjects()">Todos os Projetos</button>
+      </div>
+
+    </div>
+  <div class="no-projects">
+    <p>Sem projetos disponíveis</p>
+  </div>
+</ng-template>

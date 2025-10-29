@@ -1,0 +1,111 @@
+<section id="formEmpresa">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card_form mt-5">
+          <div class="cabecalho">
+            <h3 class="pb-3 pt-3 text-center text-white text-uppercase">Cadastro Empresa</h3>
+          </div>
+          <form class="ms-4 me-4" #formEmpresa="ngForm">
+            <fieldset>
+              <legend>
+                Dados da Empresa
+              </legend>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="cnpj" placeholder="Digite o CNPJ da Empresa" name="cnpj"
+                      #cnpj="ngModel" [(ngModel)]="empresa.cnpj" mask="00.000.000/0000-00" required>
+                    <label for="cnpj" class="form-label pergunta">CNPJ da Empresa</label>
+                    <div *ngIf="!cnpj.valid && cnpj.touched" class="alert alert-danger" role="alert">
+                      CNPJ é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="razao_social"
+                      placeholder="Digite a razão social da Empresa" name="razao_social" #razao_social="ngModel"
+                      [(ngModel)]="empresa.razao_social" required>
+                    <label for="razao_social" class="form-label pergunta">Razão Social</label>
+                    <div *ngIf="!razao_social.valid && razao_social.touched" class="alert alert-danger" role="alert">
+                      Razão Social é obrigatório
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="form-floating col-sm-6 col-12">
+                  <select class="form-select" id="gerente_id" name="gerente_id" #gerente_id="ngModel"
+                    [(ngModel)]="projeto.gerente_id">
+                    <option *ngFor="let gerente of lista_gerente" [value]="gerente.id">{{ gerente.name }}</option>
+                  </select>
+                  <label for="gerente_id" class="form-label pergunta ms-3">Gerente do Projeto</label>
+                  <div *ngIf="!gerente_id.valid && gerente_id.touched" class="alert alert-danger" role="alert">
+                    Nome do gerente é obrigatório
+                  </div>
+                </div> -->
+              </div>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-6 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="nome_fantasia"
+                      placeholder="Digite a razão social da Empresa" name="nome_fantasia" #nome_fantasia="ngModel"
+                      [(ngModel)]="empresa.nome_fantasia" required>
+                    <label for="nome_fantasia" class="form-label pergunta">Nome Fantasia</label>
+                    <div *ngIf="!nome_fantasia.valid && nome_fantasia.touched" class="alert alert-danger" role="alert">
+                      Nome Fantasia é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="form-group col-sm-3 col-12">
+                  <div class="form-floating">
+                    <input list="datalistaCidades" name="cidade_name" id="cidade_name" class="form-control" [(ngModel)]="empresa.cidade_name"
+                      #cidade_name="ngModel" (change)="getEstado(empresa.cidade_name)" required>
+                    <datalist id="datalistaCidades">
+                      <option *ngFor="let city of city_list" [value]=city.municipio >{{city.municipio}} - {{ city.ass_cidadebr_estadobr.sigla }}</option>
+                    </datalist>
+                    <label class="form-label pergunta ms-3" for="cidade_name">Municipio de Origem</label>
+                  </div>
+                </div> -->
+
+                <div class="form-floating col-sm-3 col-12">
+                  <select name="city_id" id="city_id" class="form-select" [(ngModel)]="empresa.city_id" #city_id="ngModel"
+                  (change)="getEstado(empresa.city_id)">
+                    <option *ngFor="let city of city_list" [value]=city.id >{{city.municipio}} - {{ city.ass_cidadebr_estadobr.sigla }}</option>
+                  </select>
+                  <label class="form-label pergunta ms-3" for="city_id">Municipio de Origem</label>
+                </div>
+
+                <div class="col-sm-3 col-12 mb-3">
+                  <div class="form-floating">
+                    <input class="form-control" type="text" id="estado" placeholder="Informe a sua região" name="estado"
+                     required [(ngModel)]="estado" readonly>
+                     <label for="estado" class="form-label pergunta">Estado de Origem</label>
+
+                  </div>
+                </div>
+
+                <!-- <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="estado_id"
+                      placeholder="Digite a razão social da Empresa" name="estado_id" #estado_id="ngModel"
+                      [(ngModel)]="empresa.estado_id" required>
+                    <label for="estado_id" class="form-label pergunta">Estado de Origem</label>
+                  </div>
+                </div> -->
+
+              </div>
+
+            </fieldset>
+            <button class="btn btn-primary btn-block mb-4 me-2" type="submit" [disabled]="!formEmpresa.valid"
+              (click)="saveCompany()">Cadastro de Empresa</button>
+
+              <button class="ms-3 btn btn-warning btn-block mb-4" type="submit" [disabled]="!formEmpresa.valid"
+              (click)="cadastrarFDI()">Cadastrar FDI</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

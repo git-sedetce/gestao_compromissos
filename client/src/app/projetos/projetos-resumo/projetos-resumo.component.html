@@ -1,0 +1,209 @@
+<ul class="nav nav-tabs" *ngIf="projeto">
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'resumo']" routerLinkActive="active">Resumo</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'cronograma']" routerLinkActive="active">Cronograma</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'membros']" routerLinkActive="active">Editar Membros</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['/projeto/projetos', projeto.id, 'listarMeet']" routerLinkActive="active">Reuniões</a>
+  </li>
+</ul>
+
+<div class="container">
+  <div *ngIf="projeto; else loading">
+    <div class="row">
+      <div class="col-sm-6 col-12">
+        <div class="card">
+          <div class="card-body">
+            <h1>{{ projeto.name }}</h1>
+            <p><strong>Data de inicio: </strong> {{ projeto.data_inicio | date }}</p>
+            <p><strong>Status: </strong>
+              <span *ngIf="!isEditingStatus">{{ projeto.ass_project_status?.name }}</span>
+              <select *ngIf="isEditingStatus" [(ngModel)]="selectedStatusId" class="form-control">
+                <option *ngFor="let status of statuses" [value]="status.id">{{ status.name }}</option>
+              </select>
+            </p>
+            <p><strong>Coordenação: </strong> {{ projeto.ass_project_coordenadoria?.coordenadoria }} - {{
+              projeto.ass_project_coordenadoria?.sigla }}</p>
+            <p><strong>Secretaria: </strong> {{ projeto.ass_project_sexec?.secretaria }} - {{
+              projeto.ass_project_sexec?.sigla }}</p>
+            <strong>Membros: </strong>
+            <ul>
+              <li *ngFor="let user of projeto.ass_project">{{ user.ass_project_users.name }} - {{
+                user.ass_project_resp.tipo_responsabilidade }}</li>
+            </ul>
+            <div *ngIf="projeto.ass_project_status?.name != 'Concluído' || profile_id == 1">
+              <button *ngIf="isEditingStatus" class="btn btn-primary" (click)="saveStatus()">Salvar</button>
+            <button *ngIf="!isEditingStatus && (profile_id === 1 || profile_id === 2 || profile_id === 3)"
+              class="btn btn-primary" (click)="toggleEditStatus()">Editar Status</button>
+            <button *ngIf="!isEditingStatus && authenticated" class="btn btn-warning"
+              [routerLink]="['/projeto/projetos', projeto.id, 'reunioes']">Marcar Reunião</button>
+            <button *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3" class="btn btn-danger ml-2"
+              (click)="deleteProject()">Arquivar Projeto</button>
+              <button *ngIf="profile_id === 1 || profile_id === 3" class="btn btn-info ml-2"
+              (click)="editProject(projeto)">Editar Projeto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-12">
+        <app-ver-reunioes [projetoId]="projeto.id">
+
+        </app-ver-reunioes>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <div>Loading...</div>
+</ng-template>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar arquivamento projeto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Informe o motivo do arquivamento:
+        <form #formjustify="ngForm"></form>
+        <div class="row">
+          <div class="col-sm-12 col-12 mt-3 mb-3">
+
+            <!-- <label for="justificativa" class="form-label pergunta">Justificativa</label> -->
+            <!-- <input type="text" class="form-control" id="justificativa" name="justificativa" placeholder="Digite o motivo do aquivamento" required #justificativa="ngModel" [(ngModel)]="justify.justificativa"> -->
+            <textarea name="justificativa" id="justificativa" cols="30" rows="10" class="form-control"
+              #justificativa="ngModel" [(ngModel)]="justify.justificativa" required></textarea>
+            <div *ngIf="!justificativa.valid && justificativa.touched" class="alert alert-danger" role="alert">
+              É obrigatório informar o motivo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+        <button type="button" class="btn btn-primary" (click)="confirmArchiving()">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editarModalLabel">Editar Projeto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formProject">
+          <fieldset>
+            <legend>
+              Dados do Projeto
+            </legend>
+            <div class="row mt-4 mb-4">
+              <div class="form-group col-12">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="name" placeholder="Digite o nome do Projeto" name="name"
+                  formControlName="name" required>
+                  <label for="name" class="form-label pergunta">Nome do Projeto</label>
+                  <div *ngIf="formProject.get('name')?.invalid && formProject.get('name')?.touched" class="alert alert-danger" role="alert">
+                    Nome do projeto é obrigatório
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row mt-4 mb-4">
+              <div class="form-group col-12">
+                  <label for="descricao" class="form-label pergunta">Descrição do projeto</label>
+                <textarea name="descricao" id="descricao" cols="30" rows="10" class="form-control"
+                formControlName="descricao" required></textarea>
+
+                <!-- <div *ngIf="!descricao.valid && descricao.touched" class="alert alert-danger" role="alert">
+                  Descrição do projeto é obrigatório
+                </div> -->
+              </div>
+            </div>
+
+            <div class="row mt-4 mb-4" *ngIf="profile_id === 1 || profile_id === 2 || id_sexec === 2">
+              <div class="form-group col-sm-6 col-12">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="numero_programa" placeholder="Digite o nome do Projeto" name="numero_programa" formControlName="numero_programa">
+                  <label for="numero_programa" class="form-label pergunta">Número do Programa</label>
+                </div>
+              </div>
+
+              <div class="form-group col-sm-6 col-12">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="valor"
+                    placeholder="Digite o nome do coordenador" name="valor" formControlName="valor">
+                  <label for="valor" class="form-label pergunta">Valor Investimento</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4 mb-4">
+              <div class="form-floating col-sm-6 col-12">
+                <select name="coord_id" id="coord_id" class="form-select" formControlName="coord_id" (change)="foundSexec(formProject.get('coord_id')?.value)">
+                  <option *ngFor="let coord of lista_coord" [value]=coord.id>{{coord.coordenadoria}}</option>
+                </select>
+                <label class="form-label pergunta ms-3" for="coord_id">Coordenadoria</label>
+              </div>
+
+              <div class="form-group col-sm-6 col-12 mb-3">
+                <div class="form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="secretaria_executiva"
+                    placeholder="Nome da Secretaria Executiva"
+                    name="secretaria_executiva"
+                    formControlName="secretaria_executiva"
+                    readonly
+                  />
+                  <label for="secretaria_executiva" class="form-label pergunta">Secretaria Executiva</label>
+                </div>
+              </div>
+
+            </div>
+            <div class="row mt-4 mb-4">
+              <div class="form-group col-sm-4 col-12">
+                <div class="form-outline">
+                  <label for="data_inicio" class="form-label pergunta">Início do Projeto</label>
+                  <input type="date" class="form-control" id="data_inicio" placeholder="Digite o nome do coordenador"
+                    name="data_inicio" formControlName="data_inicio" required>
+                  <!-- <div *ngIf="!data_inicio.valid && data_inicio.touched" class="alert alert-danger" role="alert">
+                    Informar a data de inínico é obrigatório
+                  </div> -->
+                </div>
+              </div>
+              <div class="form-group col-sm-4 col-12">
+                <div class="form-outline">
+                  <label for="previsao_conclusao" class="form-label pergunta">Data de Conclusão</label>
+                  <input type="date" class="form-control" id="previsao_conclusao"
+                    placeholder="Digite o nome do responsável" name="previsao_conclusao" formControlName="previsao_conclusao">
+                  <!-- <div *ngIf="!previsao_conclusao.valid && previsao_conclusao.touched" class="alert alert-danger"
+                    role="alert">
+                    Informar a data de conclusão é obrigatório
+                  </div> -->
+                </div>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="confirmEdit()">Atualizar Dados</button>
+      </div>
+    </div>
+  </div>
+</div>

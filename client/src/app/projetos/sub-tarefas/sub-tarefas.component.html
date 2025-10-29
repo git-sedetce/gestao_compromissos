@@ -1,0 +1,141 @@
+<section id="formProject">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card_form mt-5">
+          <div class="cabecalho">
+            <h3 class="pb-3 pt-3 text-center text-white text-uppercase">Sub-Tarefas</h3>
+          </div>
+          <form class="ms-4 me-4" #formSubTarefa="ngForm">
+            <fieldset>
+              <div class="row mt-4 mb-4">
+
+                <div class="form-floating col-sm-4 col-12">
+                  <select class="form-select" id="projeto_id" name="projeto_id" #projeto_id (change)="getTask(projeto_id.value)">
+                    <option>---------- Selecione o Projeto ----------</option>
+                    <option *ngFor="let projeto of lista_projetos" [value]="projeto.id">{{ projeto.name }}</option>
+                  </select>
+                  <label for="projeto_id" class="form-label pergunta ms-3">Nome do Projeto</label>
+                </div>
+
+                <div class="form-floating col-sm-4 col-12">
+                  <select class="form-select" id="tarefa_id" name="tarefa_id" #tarefa_id="ngModel"
+                    [(ngModel)]="subTarefa.tarefa_id" (change)="getUser(tarefa_id.value)" (change)="getOrdemExecucao(tarefa_id.value)" (change)="getTaskTarefa(tarefa_id.value)">
+                    <option *ngFor="let tarefa of lista_tarefa" [value]="tarefa.id">{{ tarefa.nome_ordem }}</option>
+                  </select>
+                  <label for="tarefa_id" class="form-label pergunta ms-3">Tarefa</label>
+                  <div *ngIf="!tarefa_id.valid && tarefa_id.touched" class="alert alert-danger" role="alert">
+                    Tarefa é obrigatório
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="nome_sub_tarefa" placeholder="Digite o nome da etapa" name="nome_sub_tarefa"
+                      #nome_sub_tarefa="ngModel" [(ngModel)]="subTarefa.nome_sub_tarefa" required>
+                    <label for="nome_sub_tarefa" class="form-label pergunta">Nome da etapa</label>
+                    <div *ngIf="!nome_sub_tarefa.valid && nome_sub_tarefa.touched" class="alert alert-danger" role="alert">
+                      Nome da etapa da tarefa é obrigatório
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4 mb-4">
+
+                <div class="form-floating col-sm-9 col-12">
+                  <select class="form-select" id="responsavel_id" name="responsavel_id" #responsavel_id="ngModel"
+                    [(ngModel)]="subTarefa.responsavel_id">
+                    <option *ngFor="let user of lista_user" [value]="user.UserId">{{ user.ass_project_users.name }}</option>
+                  </select>
+                  <label for="responsavel_id" class="form-label pergunta ms-3">Responsável</label>
+                  <div *ngIf="!responsavel_id.valid && responsavel_id.touched" class="alert alert-danger" role="alert">
+                    Nome do responsável é obrigatório
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-3 col-12">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="execucao" placeholder="Digite o nome do coordenador"
+                      name="execucao" #execucao="ngModel" [(ngModel)]="subTarefa.execucao" disabled>
+                      <label for="execucao" class="form-label pergunta">Ordem de Execução</label>
+                    <div *ngIf="!execucao.valid && execucao.touched" class="alert alert-danger" role="alert">
+                      Informar a ordem de execução é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row mt-4 mb-4">
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-outline">
+                    <label for="data_inicial" class="form-label pergunta">Data de Inicio</label>
+                    <input type="date" class="form-control" id="data_inicial"
+                      placeholder="Digite o nome do responsável" name="data_inicial" #data_inicial="ngModel"
+                      [(ngModel)]="subTarefa.data_inicial" required>
+                    <div *ngIf="!data_inicial.valid && data_inicial.touched" class="alert alert-danger"
+                      role="alert">
+                      Informar a data de início é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <div class="form-outline">
+                    <label for="prazo" class="form-label pergunta">Prazo</label>
+                    <input type="number" class="form-control" id="prazo" placeholder="Expectativa de concluir em dias"
+                      name="prazo" #prazo="ngModel" [(ngModel)]="subTarefa.prazo" required>
+                    <div *ngIf="!prazo.valid && prazo.touched" class="alert alert-danger" role="alert">
+                      Informar o prazo é obrigatório
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-4 col-12">
+                  <label class="form-label pergunta ms-3" for="status_id">Status</label>
+                  <select name="status_id" id="status_id" class="form-select" [(ngModel)]="subTarefa.status_id" #status_id="ngModel">
+                    <option *ngFor="let status of lista_status" [value]="status.id">{{ status.name }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row mt-4 mb-4" *ngIf="listar_sub">
+                <div class="form-group ms-3 col-sm-5 col-12 mb-3">
+                  <label for="have_pending" class="pergunta">Tarefa depende de outra tarefa?</label><br><br>
+                  <div class="ms-4 form-check form-check-inline">
+                    <input class="form-check-input" required type="radio" name="have_pending" id="pending_sim" value="sim" ngModel
+                      #pendencia="ngModel" [(ngModel)]="pending" [(ngModel)]="subTarefa.pendencia">
+                    <label class="form-check-label" for="pending_sim">
+                      Sim
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" required type="radio" name="have_pending" id="pending_nao" value="nao"
+                      ngModel #pendencia="ngModel" [(ngModel)]="pending" [(ngModel)]="subTarefa.pendencia">
+                    <label class="form-check-label" for="pending_nao">
+                      Não
+                    </label>
+                  </div>
+                </div>
+
+                  <div class="col-sm-6 col-12" *ngIf="pending == 'sim'">
+                    <div class="form-floating">
+                      <select class="form-select" id="projeto_id" name="tarefa_pendente" #tarefa_pendente="ngModel"
+                      [(ngModel)]="subTarefa.tarefa_pendente">
+                        <option>-------------------------- Informe a Tarefa --------------------------</option>
+                        <option *ngFor="let task of lista_sub_tarefa" [value]="task.id">{{ task.nome_sub_tarefa }}</option>
+                      </select>
+                      <label for="tarefa_id" class="form-label pergunta ms-3">Tarefa de pendencia</label>
+                    </div>
+
+                  </div>
+
+              </div>
+              <button class="btn btn-primary btn-block mb-4" type="submit" [disabled]="!formSubTarefa.valid" (click)="saveSubTarefa()">Cadastrar SubTarefa</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
