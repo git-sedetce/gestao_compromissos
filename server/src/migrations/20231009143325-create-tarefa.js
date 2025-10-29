@@ -44,13 +44,6 @@ module.exports = {
       execucao: {
         type: Sequelize.INTEGER
       },
-      projeto_id: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        references: { model: 'Projetos', key: 'id' },
-        onDelete: "Cascade",
-        onUpdate: "Cascade"
-      },
       tarefa_arquivada: {
         type: Sequelize.BOOLEAN
       }, 
