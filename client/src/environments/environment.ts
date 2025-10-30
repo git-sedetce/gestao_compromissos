@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:1823/',
+  apiUrl: 'http://localhost:1829/',
 };
 
 //apiUrl: 'https://api-gestaoprojetos.sde.ce.gov.br/',

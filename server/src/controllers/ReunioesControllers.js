@@ -6,7 +6,7 @@ const baseUrl = process.cwd() + "/src"; //__dirname + '.
 class ReunioesControllers {
   static async cadastraReunioes(req, res) {
     const newMeet = req.body;
-    // console.log("newMeet", newMeet);
+    console.log("newMeet", newMeet);
     try {
       const newProject = await database.Reuniao.create(newMeet);
       return res.status(200).json(newProject);
@@ -28,11 +28,6 @@ class ReunioesControllers {
                 "compromissos_concluidos"
             ],
             include: [
-                {
-                    model: database.Projeto,
-                    as: "ass_meet_project",
-                    attributes: ["name", "descricao"],
-                },
                 {
                     model: database.Cronograma,
                     as: "ass_meet_cronograma",
@@ -152,11 +147,6 @@ class ReunioesControllers {
         ],
         include: [
           {
-            association: "ass_meet_project",
-            where: (database.Reuniao.projeto_id = database.Reuniao.id),
-            attributes: ["name", "descricao"],
-          },
-          {
             association: "ass_meet_coord",
             where: (database.Reuniao.coord_id =
               database.Coordenadorias.coord_id),
@@ -202,11 +192,6 @@ class ReunioesControllers {
           "pauta",
         ],
         include: [
-          {
-            association: "ass_meet_project",
-            where: (database.Reuniao.projeto_id = database.Reuniao.id),
-            attributes: ["name", "descricao"],
-          },
           {
             association: "ass_meet_coord",
             where: (database.Reuniao.coord_id =
@@ -272,11 +257,6 @@ class ReunioesControllers {
           "pauta",
         ],
         include: [
-          {
-            association: "ass_meet_project",
-            where: (database.Reuniao.projeto_id = database.Reuniao.id),
-            attributes: ["name", "descricao"],
-          },
           {
             association: "ass_meet_coord",
             where: (database.Reuniao.coord_id =

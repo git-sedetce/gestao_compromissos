@@ -1,5 +1,17 @@
-<div class="container-fluid mt-3 pt-2">
-  <div class="card ms-3 me-3">
+<div class="container-fluid">
+  <div class="row bg-secondary-subtle">
+    <div class="d-flex gap-2 justify-content-center py-4">
+      <button class="btn btn-primary rounded-pill px-3" type="button" routerLink="/commitment/reuniao"
+        *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">Cadastrar Reunião</button>
+      <button class="btn btn-warning rounded-pill px-3" routerLink="/commitment/home"
+        type="button">Acompanhamento</button>
+        <button class="btn btn-success rounded-pill px-3" routerLink="/commitment/acompanhamento"
+        type="button">Ver Reuniões</button>
+    </div>
+
+    <div class="b-example-divider"></div>
+  </div>
+  <div class="card ms-3 me-3 mt-3 pt-2">
     <div class="card-body">
       <h3 class="text-center mt-3 mb-3 pt-2 pb-2 text-uppercase text-white bg-warning">Participantes da reunião: {{
         meetUp.nome_reuniao }}</h3>
@@ -36,13 +48,13 @@
                   <td class="align-middle text-center">{{ meet.ass_commitment_status.name }}</td>
 
                   <td class="align-middle text-center">
-                    <button class="btn btn-warning" (click)="getSituacao(meet.id, meet.ass_commitment_users.id)"
+                    <button class="btn btn-warning" *ngIf="meet.ass_commitment_status.name != 'Concluído'" (click)="getSituacao(meet.id, meet.ass_commitment_users.id)"
                       data-bs-toggle="modal" data-bs-target="#modalEditStatus"><fa-icon [icon]="faPaperclip"></fa-icon>
                     </button>
                   </td>
 
                   <td class="align-middle text-center" *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">
-                    <button title="Ver Reuniao" type="button" class="btn btn-success mx-3"
+                    <button title="Ver Reuniao" type="button" class="btn btn-success mx-3" *ngIf="meet.ass_commitment_status.name != 'Concluído'"
                       (click)="mailCommitment(meet.id)"><i class="bi bi-envelope-arrow-up-fill"></i></button>
                   </td>
 
@@ -273,7 +285,7 @@
                 <p class="mb-0">SECRETARIA DO DESENVOLVIMENTO ECONÔMICO</p>
               </div>
               <div class="text-end mt-3 mt-md-0">
-                <img src="./assets/imgs/Logo-SDE---Horizontal.png" alt="Logo da Secretaria" style="height: 80px;"
+                <img src="../../../assets/imgs/logos/Logo-SDE---Horizontal.png" alt="Logo da Secretaria" style="height: 80px;"
                   class="img-fluid">
               </div>
             </div>
@@ -324,7 +336,7 @@
           <div class="row mt-4">
             <footer class="container-fluid">
               <figure id="rodape">
-                <img src="./assets/imgs/rodape.png" alt="Rodapé Governo do Ceará" class="img-fluid w-100">
+                <img src="../../../assets/imgs/logos/rodape.png" alt="Rodapé Governo do Ceará" class="img-fluid w-100">
               </figure>
             </footer>
           </div>

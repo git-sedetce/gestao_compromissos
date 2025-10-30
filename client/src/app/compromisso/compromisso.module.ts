@@ -15,6 +15,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { HomeComponent } from './home/home.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { QuillModule } from 'ngx-quill';
+import { CadastroParceiroComponent } from '../components/paginas/cadastro-parceiro/cadastro-parceiro.component';
 
 
 
@@ -24,7 +25,8 @@ import { QuillModule } from 'ngx-quill';
     AcompanhamentoComponent,
     CadastroParticipantesComponent,
     MembroReuniaoComponent,
-    HomeComponent
+    HomeComponent,
+    CadastroParceiroComponent
   ],
   imports: [
     CommonModule,

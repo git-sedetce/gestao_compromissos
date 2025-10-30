@@ -138,12 +138,12 @@ export class ReuniaoComponent {
       this.reuniao.ata_registrada = false;
       this.serviceReuniao.cadastrarReuniao(this.reuniao).subscribe({
         next: (res: any) => {
-          // console.log('reunião', this.reuniao)
+          console.log('reunião', this.reuniao)
           this.toastr.success('Reunião cadstrada com sucesso!');
           this.formReuniao.reset();
           this.router.navigate(['/commitment/acompanhamento']);
         },
-        error: (e) => (this.toastr.error(e))
+        error: (e) => console.error(e) //(this.toastr.error(e)
       })
       this.saveRegister();
     }

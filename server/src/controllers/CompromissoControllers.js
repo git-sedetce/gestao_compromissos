@@ -252,7 +252,7 @@ class CompromissoController {
   static async allMeet(req, res) {
     try {
       const mostrarReunioes = await database.Reuniao.findAll({
-        where: { projeto_id: null },
+        // where: { projeto_id: null },
         order: [["data_reuniao", "DESC"]],
         attributes: [
           "id",
@@ -563,6 +563,18 @@ class CompromissoController {
         }
       });
       return res.status(200).json(getUserCommitment);
+    } catch (error) {
+      return res.status(500).json(error.message);
+    }
+  }
+
+  static async todosStatus(req, res) {
+    try {
+      const mostrarStatus = await database.Status.findAll({
+        order: ["id"],
+        attributes: ["id", "name"],
+      });
+      return res.status(200).json(mostrarStatus);
     } catch (error) {
       return res.status(500).json(error.message);
     }

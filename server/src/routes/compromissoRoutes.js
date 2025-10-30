@@ -22,4 +22,6 @@ router.get('/meetSexec/:id', CompromissoController_02.meetBySexec);
 
 router.get('/mailCommitment/:id', CompromissoController.enviarEmail)
 
+router.get('/allStatus', CompromissoController.todosStatus);
+
 module.exports = router

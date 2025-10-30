@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Tarefa.belongsTo(models.Users, { foreignKey: 'responsavel_id', as: 'ass_tarefa_users' });
-      Tarefa.belongsTo(models.Projeto, { foreignKey: 'projeto_id'});
+      // Tarefa.belongsTo(models.Projeto, { foreignKey: 'projeto_id'});
       Tarefa.hasMany(models.Sub_Tarefa, { foreignKey: 'tarefa_id', as: 'ass_tarefa_task' });
       Tarefa.belongsTo(models.Status, { foreignKey: 'status_id', as: 'ass_tarefa_status'});
       Tarefa.belongsTo(models.Reuniao, { foreignKey: 'reuniao_id', as: 'ass_task_meet' });

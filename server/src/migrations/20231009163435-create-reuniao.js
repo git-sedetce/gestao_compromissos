@@ -51,6 +51,9 @@ module.exports = {
       ata_registrada: {
         type: Sequelize.BOOLEAN
       },
+      compromissos_concluidos: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

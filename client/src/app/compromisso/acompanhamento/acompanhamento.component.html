@@ -1,5 +1,15 @@
-<div class="container-fluid mt-3 pt-2">
-  <div class="card ms-3 me-3" *ngIf="have_meet">
+<div class="container-fluid">
+  <div class="row bg-secondary-subtle">
+    <div class="d-flex gap-2 justify-content-center py-4">
+      <button class="btn btn-primary rounded-pill px-3" type="button" routerLink="/commitment/reuniao"
+        *ngIf="profile_id === 1 || profile_id === 2 || profile_id === 3">Cadastrar Reunião</button>
+      <button class="btn btn-warning rounded-pill px-3" routerLink="/commitment/home"
+        type="button">Acompanhamento</button>
+    </div>
+
+    <div class="b-example-divider"></div>
+  </div>
+  <div class="card ms-3 me-3 mt-3 pt-2" *ngIf="have_meet">
     <div class="row">
 
       <div class="form-floating col-sm-6 col-12 mt-3 mb-2 ms-5">
@@ -85,7 +95,7 @@
                 </div>
               </div>
               <div class="col-sm-5 col-12 logo">
-                <img class="mt-2" src="./assets/imgs/Logo-SDE---Horizontal.png" alt="Logo da Secretaria">
+                <img class="mt-2" src="../../../assets/imgs/logos/Logo-SDE---Horizontal.png" alt="Logo da Secretaria">
               </div>
             </div>
 
@@ -128,7 +138,7 @@
             <div class="row">
               <footer class="container-fluid">
                 <figure id="rodape">
-                  <img src="./assets/imgs/rodape.png" alt="Rodapé Governo do Ceará">
+                  <img src="../../../assets/imgs/logos/rodape.png" alt="Rodapé Governo do Ceará">
                 </figure>
               </footer>
             </div>
