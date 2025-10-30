@@ -4,3 +4,5 @@ client/node_modules/*
 server/src/storage/*
 server/start.sh
 .env
+client/.angular/*
+client/dist/client/*
